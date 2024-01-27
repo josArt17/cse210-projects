@@ -1,6 +1,10 @@
 using System;
 using System.IO;
 
+// CSE210 W03 JOSE ANGEL ARTEAGA
+// Requirements exceeded, I added to my code the ability to read scriptures from a .txt file.
+//The code will display a random scripture each time the program 
+//is initiated and will hide parts each time the enter key is pressed.
 class Program
 {
     static void Main(string[] args)
