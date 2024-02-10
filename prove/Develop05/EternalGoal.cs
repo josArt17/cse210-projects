@@ -13,7 +13,6 @@ public class EternalGoal : Goal
 
     public override bool IsComplete()
     {
-        // Implementa la lógica para determinar si el objetivo eterno está completo
         return false;
     }
 
