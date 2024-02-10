@@ -24,7 +24,6 @@ public class Goal
 
     public virtual bool IsComplete()
     {
-        // La lógica de completado dependerá de las subclases
         return false;
     }
 
