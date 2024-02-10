@@ -8,6 +8,7 @@ public class Goal
 
     public string Name => _shortName;
     public int Points => _points;
+    public string Description => _description;
 
     public Goal(string shortName, string description, int points)
     {
