@@ -13,56 +13,41 @@ public class EmailSender : FileHandler
 
     public void SendEmail(string toEmail, string attachmentPath)
     {
-        string htmlMessage = GetHtmlMessage();
+        string plainTextMessage = GetPlainTextMessage();
 
-        var message = CreateEmailMessage(toEmail, htmlMessage, attachmentPath);
+        var message = CreateEmailMessage(toEmail, plainTextMessage, attachmentPath);
 
-        SendEmail(message);
+        Console.WriteLine("Preparing to send message");
+
+        deliverMessage(message);
 
         Console.WriteLine($"Message delivery to: {toEmail}");
     }
 
-    private string GetHtmlMessage()
+    private string GetPlainTextMessage()
     {
-        return @"
-            <html>
-            <style>
-                .logo-img {
-                    width: 100px;
-                }
-            </style>
-            <body>
-            <header>
-                <img src=""some_img.png"" class=""logo-img"">
-            </header>
-            <h1>Hello</h1>
-            <p>Sending you the weekly report of the branch sales data, I'm attaching it as an Excel file.</p>
-            <p>Gretings</p>
-            </body>
-            </html>
-        ";
+        return "Hello,\n\nSending you the weekly report of the branch sales data, I'm attaching it as an Excel file.\n\nGreetings";
     }
 
-    private MailMessage CreateEmailMessage(string toEmail, string htmlMessage, string attachmentPath)
+    private MailMessage CreateEmailMessage(string toEmail, string plainTextMessage, string attachmentPath)
     {
         var message = new MailMessage
         {
             Subject = "Some subject",
-            From = new MailAddress("email@mail.com"),
-            Body = htmlMessage,
-            IsBodyHtml = true
+            From = new MailAddress("cuentas@arthecnology.com"),
+            Body = plainTextMessage
         };
 
         message.To.Add(toEmail);
 
-        var htmlView = AlternateView.CreateAlternateViewFromString(htmlMessage, null, "text/html");
-        message.AlternateViews.Add(htmlView);
-
         var attachment = CreateAttachment(attachmentPath);
         message.Attachments.Add(attachment);
 
+        message.BodyEncoding = System.Text.Encoding.UTF8;
+
         return message;
     }
+
 
     private Attachment CreateAttachment(string attachmentPath)
     {
@@ -74,11 +59,21 @@ public class EmailSender : FileHandler
         return attachment;
     }
 
-    private void SendEmail(MailMessage message)
+    private void deliverMessage(MailMessage message)
     {
-        using (var client = emailConnection.GetSmtpClient())
+        try
         {
-            client.Send(message);
+        
+            using (var client = emailConnection.GetSmtpClient())
+            {
+                client.Send(message);
+            }
+        
+            Console.WriteLine("Email sent successfully");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error sending email: {ex.Message}");
         }
     }
 }

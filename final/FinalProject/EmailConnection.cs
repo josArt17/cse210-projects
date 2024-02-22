@@ -1,19 +1,31 @@
+using System;
 using System.Net;
 using System.Net.Mail;
 
 public class EmailConnection
 {
-    private const string Host = "HOST OF THE EMAIL";
-    private const int Port = 0000;
-    private const string User = "USER OF THE EMAIL";
-    private const string Password = "PASSWORD";
+    private const string Host = "";
+    private const int Port = 587;
+    private const string User = "";
+    private const string Password = "";
 
     public SmtpClient GetSmtpClient()
     {
-        return new SmtpClient(Host, Port)
+        try
         {
-            Credentials = new NetworkCredential(User, Password),
-            EnableSsl = true
-        };
+            var client = new SmtpClient(Host, Port)
+            {
+                Credentials = new NetworkCredential(User, Password),
+                EnableSsl = true
+            };
+
+            Console.WriteLine("SMTP Connection successful");
+            return client;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"SMTP Connection failed. Error: {ex.Message}");
+            throw;
+        }
     }
 }
